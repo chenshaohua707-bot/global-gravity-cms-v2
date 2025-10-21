@@ -1,7 +1,7 @@
 ﻿services:
   - type: web
     name: global-gravity-cms-v2
-    runtime: node
+    env: node
     plan: free
     region: oregon
     buildCommand: npm ci && npm run build
@@ -15,16 +15,36 @@
         value: 0.0.0.0
       - key: PORT
         value: 10000
+
+      # 🔑 安全密钥（必须有，否则 Strapi 无法运行）
       - key: APP_KEYS
-        generateValue: true
+        value: "a1b2c3d4,e5f6g7h8"   # 随机字符串，用逗号隔开2个以上
       - key: API_TOKEN_SALT
-        generateValue: true
+        value: "randomApiSalt123456"
       - key: ADMIN_JWT_SECRET
-        generateValue: true
+        value: "superAdminSecret98765"
       - key: TRANSFER_TOKEN_SALT
-        generateValue: true
-      # 使用 SQLite（临时存储）
+        value: "transferSecret45678"
+      - key: JWT_SECRET
+        value: "jwtSecret123456789"
+
+      # 🔗 数据库配置（PostgreSQL）
       - key: DATABASE_CLIENT
-        value: sqlite
-      - key: DATABASE_FILENAME
-        value: .tmp/data.db
+        value: postgres
+      - key: DATABASE_HOST
+        value: ${DATABASE_HOST}
+      - key: DATABASE_PORT
+        value: ${DATABASE_PORT}
+      - key: DATABASE_NAME
+        value: ${DATABASE_NAME}
+      - key: DATABASE_USERNAME
+        value: ${DATABASE_USER}
+      - key: DATABASE_PASSWORD
+        value: ${DATABASE_PASSWORD}
+      - key: DATABASE_SSL
+        value: true
+
+databases:
+  - name: global-gravity-db
+    plan: free
+    region: oregon
